@@ -1,0 +1,22 @@
+.primary {
+  padding: 0px 200px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 50px 50px 50px !important;
+}
+
+.required-ipt {
+  color: red !important;
+  font-weight: bold !important;
+}
+
+/* .btn-send {
+  margin: 0px 200px 30px 200px !important;
+} */
