@@ -1,0 +1,85 @@
+.header-main {
+  text-align: center;
+}
+
+.card-body {
+  border-top: 1px solid #00000009 !important;
+  padding-top: 30px;
+}
+
+.p-button-edit {
+  background-color: aliceblue !important;
+}
+
+.cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cabecalho2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cabecalho span {
+  flex: 1 1 50%;
+  margin-bottom: 5px;
+}
+
+.p-button-edit:hover {
+  background-color: #d2eaff !important;
+}
+
+.p-button-success {
+  background-color: #f0fff0 !important;
+}
+
+.p-button-success:hover {
+  background-color: #d2ffd9 !important;
+}
+
+.p-button-danger {
+  background-color: #fff0f0 !important;
+}
+
+.p-button-danger:hover {
+  background-color: #ffd2d2 !important;
+}
+
+.logo-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 50px 50px 50px !important;
+}
+
+.text-bloquead {
+  text-align: center !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+}
+
+.card {
+  padding: 10px !important;
+}
+
+@keyframes moveUpDown {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+#animated-image {
+  animation: moveUpDown 2s infinite alternate;
+}
+
+.alert-seconds {
+  text-align: center;
+}
