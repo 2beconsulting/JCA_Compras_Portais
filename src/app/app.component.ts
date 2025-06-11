@@ -120,6 +120,8 @@ export class AppComponent implements OnInit {
   public editModal: any;
   public valueDs: any;
   public lojaForn: any;
+  public fornecedorLoja: any;
+  public fornecedorCod: any;
   public anexosGED: any;
   public uploadedFiles: any;
   public newFileName: any[] = [];
@@ -423,18 +425,20 @@ export class AppComponent implements OnInit {
     }
 
     try {
+      console.log(data)
+      console.log(data.Cotacao)
       const documentData = {
         values: data.Cotacao.map((cotacao: any, index: number) => {
           const isMatchingCotacao =
             cotacao.Produto.trim() == product.Codigo.trim() &&
-            cotacao.Fornecedor == product.Fornecedor &&
-            cotacao.Loja == product.Loja;
+            cotacao.Fornecedor == this.fornecedorCod &&
+            cotacao.Loja == this.fornecedorLoja;
 
           const isSameProductFamily =
             cotacao.Produto.trim().substring(0, 8) ==
             product.Produto.trim().substring(0, 8) &&
-            cotacao.Fornecedor == product.Fornecedor &&
-            cotacao.Loja == product.Loja;
+            cotacao.Fornecedor == this.fornecedorCod &&
+            cotacao.Loja == this.fornecedorLoja;
 
           return [
             {
@@ -467,7 +471,7 @@ export class AppComponent implements OnInit {
             },
             {
               fieldId: `C8_LOJA___${index + 1}`,
-              value: isMatchingCotacao ? product.Loja : cotacao.Loja,
+              value: isMatchingCotacao ? this.fornecedorLoja : cotacao.Loja,
             },
             {
               fieldId: `C8_QUANT___${index + 1}`,
@@ -609,186 +613,7 @@ export class AppComponent implements OnInit {
         }).flat(),
       };
 
-      data.ForneAll.forEach((fornecedor: any, index: number) => {
-        documentData.values.push(
-          {
-            fieldId: `A2_COD___${index + 1}`,
-            value: fornecedor.Codigo,
-          },
-          {
-            fieldId: `A2_LOJA___${index + 1}`,
-            value: fornecedor.Loja,
-          },
-          {
-            fieldId: `A2_NOME___${index + 1}`,
-            value: fornecedor.Descricao,
-          },
-          {
-            fieldId: `A2_CGC___${index + 1}`,
-            value: fornecedor.CNPJ,
-          },
-          {
-            fieldId: `A2_EST___${index + 1}`,
-            value: fornecedor.UF,
-          },
-          {
-            fieldId: `A2_COND___${index + 1}`,
-            value: fornecedor.CondPagamento,
-          },
-          {
-            fieldId: `A2_TPFRETE___${index + 1}`,
-            value: fornecedor.TipoFrete,
-          },
-          {
-            fieldId: `A2_VALFRE___${index + 1}`,
-            value: fornecedor.ValorFrete,
-          },
-          {
-            fieldId: `A2_VALIDA___${index + 1}`,
-            value: fornecedor.Validade,
-          }
-        );
-      });
 
-      data.ScAll.forEach((sc: any, index: number) => {
-        documentData.values.push(
-          {
-            fieldId: `C1_ITEM___${index + 1}`,
-            value: sc.Item,
-          },
-          {
-            fieldId: `C1_PRODUTO___${index + 1}`,
-            value: sc.Produto,
-          },
-          {
-            fieldId: `C1_UM___${index + 1}`,
-            value: sc.UM,
-          },
-          {
-            fieldId: `C1_DESCRI___${index + 1}`,
-            value: sc.Descricao,
-          },
-          {
-            fieldId: `C1_QUANT___${index + 1}`,
-            value: sc.Quantidade,
-          },
-          {
-            fieldId: `C1_PRECO___${index + 1}`,
-            value: sc.Preco,
-          },
-          {
-            fieldId: `C1_TOTAL___${index + 1}`,
-            value: sc.Total,
-          }
-        );
-      });
-
-      data.ForneProdAll.forEach((forneProd: any, index: number) => {
-        documentData.values.push(
-          {
-            fieldId: `A5_PRODUTO___${index + 1}`,
-            value: forneProd.Produto,
-          },
-          {
-            fieldId: `A5_NOMPROD___${index + 1}`,
-            value: forneProd.NomeProduto,
-          },
-          {
-            fieldId: `A5_NOMEFOR___${index + 1}`,
-            value: forneProd.NomeFornecedor,
-          },
-          {
-            fieldId: `A5_FORNECE___${index + 1}`,
-            value: forneProd.CodFornecedor,
-          },
-          {
-            fieldId: `A5_LOJA___${index + 1}`,
-            value: forneProd.Loja,
-          }
-        );
-      });
-
-      data.ProdutoAll.forEach((produtoFilho: any, index: number) => {
-        documentData.values.push(
-          {
-            fieldId: `B1_COD___${index + 1}`,
-            value: produtoFilho.Codigo,
-          },
-          {
-            fieldId: `B1_PAI___${index + 1}`,
-            value: produtoFilho.ProdutoPai,
-          },
-          {
-            fieldId: `B1_DESC___${index + 1}`,
-            value: produtoFilho.Descricao,
-          },
-          {
-            fieldId: `B1_GRUPO___${index + 1}`,
-            value: produtoFilho.Grupo,
-          },
-          {
-            fieldId: `B1_LOCPAD___${index + 1}`,
-            value: produtoFilho.Loc,
-          },
-          {
-            fieldId: `B1_MSBLQL___${index + 1}`,
-            value: produtoFilho.Msb,
-          },
-          {
-            fieldId: `B1_TIPO___${index + 1}`,
-            value: produtoFilho.Tipo,
-          },
-          {
-            fieldId: `B1_UM___${index + 1}`,
-            value: produtoFilho.Um,
-          },
-          {
-            fieldId: `B1_ZMARCA___${index + 1}`,
-            value: produtoFilho.Marca,
-          },
-          {
-            fieldId: `ZPM_DESC___${index + 1}`,
-            value: produtoFilho.Desc,
-          },
-          {
-            fieldId: `B1_UPRC___${index + 1}`,
-            value: produtoFilho.Uprc,
-          },
-          {
-            fieldId: `B1_UCOM___${index + 1}`,
-            value: produtoFilho.Ucom,
-          }
-        );
-      });
-
-      data.TesAll.forEach((tes: any, index: number) => {
-        documentData.values.push(
-          {
-            fieldId: `TES_A2_COD___${index + 1}`,
-            value: tes.A2_COD,
-          },
-          {
-            fieldId: `TES_A2_LOJA___${index + 1}`,
-            value: tes.A2_LOJA,
-          },
-          {
-            fieldId: `TES_A2_CGC___${index + 1}`,
-            value: tes.A2_CGC,
-          },
-          {
-            fieldId: `TES_B1_COD___${index + 1}`,
-            value: tes.B1_COD,
-          },
-          {
-            fieldId: `TES_CODIGO___${index + 1}`,
-            value: tes.TES_CODIGO,
-          },
-          {
-            fieldId: `TES_COMPRADOR___${index + 1}`,
-            value: tes.TES_COMPRADOR,
-          }
-        );
-      });
 
       this.service
         .updateCotacion(
@@ -1028,7 +853,8 @@ export class AppComponent implements OnInit {
       const documentData = {
         values: data[0].ForneAll.map((fornecedor: any, index: number) => {
           const isMatchingFornecedor =
-            fornecedor.CNPJ == product.CNPJ && fornecedor.Loja == product.Loja;
+            fornecedor.Codigo == this.fornecedorCod
+            && fornecedor.Loja == this.fornecedorLoja;
 
           return [
             {
@@ -1086,111 +912,6 @@ export class AppComponent implements OnInit {
           ];
         }).flat(),
       };
-
-      data[0].Cotacao.forEach((cotacao: any, index: number) => {
-        // documentData.values.push(
-        //   {
-        //     fieldId: `C8_CICLO___${index + 1}`,
-        //     value: cotacao.Ciclo,
-        //   },
-        //   {
-        //     fieldId: `BEN_FISCAL___${index + 1}`,
-        //     value: cotacao.BeneficioFiscal,
-        //   },
-        //   {
-        //     fieldId: `C8_ITEM___${index + 1}`,
-        //     value: cotacao.Item,
-        //   },
-        //   {
-        //     fieldId: `C8_PRODUTO___${index + 1}`,
-        //     value: cotacao.Produto,
-        //   },
-        //   {
-        //     fieldId: `C8_UM___${index + 1}`,
-        //     value: cotacao.UM,
-        //   },
-        //   {
-        //     fieldId: `C8_FORNECE___${index + 1}`,
-        //     value: cotacao.Fornecedor,
-        //   },
-        //   {
-        //     fieldId: `C8_LOJA___${index + 1}`,
-        //     value: cotacao.Loja,
-        //   },
-        //   {
-        //     fieldId: `C8_QUANT___${index + 1}`,
-        //     value: cotacao.QtdFornecida,
-        //   },
-        //   {
-        //     fieldId: `C8_PRECO___${index + 1}`,
-        //     value: cotacao.Preco,
-        //   },
-        //   {
-        //     fieldId: `C8_TOTAL___${index + 1}`,
-        //     value: cotacao.Total,
-        //   },
-        //   {
-        //     fieldId: `C8_COND___${index + 1}`,
-        //     value: cotacao.Condicao,
-        //   },
-        //   {
-        //     fieldId: `C8_PRAZO___${index + 1}`,
-        //     value: cotacao.Prazo,
-        //   },
-        //   {
-        //     fieldId: `C8_FILENT___${index + 1}`,
-        //     value: cotacao.FilialEntrega,
-        //   },
-        //   {
-        //     fieldId: `C8_EMISSAO___${index + 1}`,
-        //     value: cotacao.Emissao,
-        //   },
-        //   {
-        //     fieldId: `C8_VALIPI___${index + 1}`,
-        //     value: cotacao.IPI,
-        //   },
-        //   {
-        //     fieldId: `C8_VALICM___${index + 1}`,
-        //     value: cotacao.ICMS,
-        //   },
-        //   {
-        //     fieldId: `C8_VALISS___${index + 1}`,
-        //     value: cotacao.ISS,
-        //   },
-        //   {
-        //     fieldId: `C8_DIFAL___${index + 1}`,
-        //     value: cotacao.DIFAL,
-        //   },
-        //   {
-        //     fieldId: `C8_SEGURO___${index + 1}`,
-        //     value: cotacao.Seguro,
-        //   },
-        //   {
-        //     fieldId: `C8_DESPESA___${index + 1}`,
-        //     value: cotacao.Despesa,
-        //   },
-        //   {
-        //     fieldId: `C8_VALFRE___${index + 1}`,
-        //     value: cotacao.ValorFrete,
-        //   },
-        //   {
-        //     fieldId: `C8_TPFRETE___${index + 1}`,
-        //     value: cotacao.TipoFrete,
-        //   },
-        //   {
-        //     fieldId: `C8_VALIDA___${index + 1}`,
-        //     value: cotacao.Validade,
-        //   },
-        //   {
-        //     fieldId: `C8_NUMPED___${index + 1}`,
-        //     value: cotacao.Pedido,
-        //   },
-        //   {
-        //     fieldId: `C8_ITEMPED___${index + 1}`,
-        //     value: cotacao.ItemPedido,
-        //   }
-        // );
-      });
 
       data[0].ScAll.forEach((sc: any, index: number) => {
         documentData.values.push(
@@ -1342,8 +1063,8 @@ export class AppComponent implements OnInit {
           this.valueFinish.forEach((item: any, id: any) => {
             item.ForneAll.forEach((fornecedor: any, index: any) => {
               if (
-                fornecedor.CNPJ == product.CNPJ &&
-                fornecedor.Loja == product.Loja
+                fornecedor.Codigo == this.fornecedorCod &&
+                fornecedor.Loja == this.fornecedorLoja
               ) {
                 this.valueFinish[id].ForneAll[index] = {
                   ...this.valueFinish[id].ForneAll[index],
@@ -1577,6 +1298,9 @@ export class AppComponent implements OnInit {
     const codValue = params.get('cod');
     const lojValue = params.get('loja');
 
+    this.fornecedorCod = codValue?.toString() || '';
+    this.fornecedorLoja = lojValue?.toString() || '';
+
     try {
       const [
         responseCond,
@@ -1594,6 +1318,16 @@ export class AppComponent implements OnInit {
               _initialValue: params.get('numSolic')?.toString(),
               _finalValue: params.get('numSolic')?.toString(),
               _type: 1,
+            }, {
+              _field: 'fornecedor',
+              _initialValue: params.get('cod')?.toString(),
+              _finalValue: params.get('cod')?.toString(),
+              _type: 1,
+            }, {
+              _field: 'loja',
+              _initialValue: params.get('loja')?.toString(),
+              _finalValue: params.get('loja')?.toString(),
+              _type: 1,
             },
           ])
           .toPromise(),
@@ -1604,6 +1338,16 @@ export class AppComponent implements OnInit {
               _initialValue: fieldValue,
               _finalValue: fieldValue,
               _type: 1,
+            }, {
+              _field: 'fornecedor',
+              _initialValue: params.get('cod')?.toString(),
+              _finalValue: params.get('cod')?.toString(),
+              _type: 1,
+            }, {
+              _field: 'loja',
+              _initialValue: params.get('loja')?.toString(),
+              _finalValue: params.get('loja')?.toString(),
+              _type: 1,
             },
           ])
           .toPromise(),
@@ -1613,6 +1357,16 @@ export class AppComponent implements OnInit {
               _field: 'solicitacao',
               _initialValue: fieldValue,
               _finalValue: fieldValue,
+              _type: 1,
+            }, {
+              _field: 'fornecedor',
+              _initialValue: params.get('cod')?.toString(),
+              _finalValue: params.get('cod')?.toString(),
+              _type: 1,
+            }, {
+              _field: 'loja',
+              _initialValue: params.get('loja')?.toString(),
+              _finalValue: params.get('loja')?.toString(),
               _type: 1,
             },
           ])
@@ -1674,12 +1428,10 @@ export class AppComponent implements OnInit {
               const productResponse = allProductValues.filter(
                 (productP: any) => productP.Codigo === product.Produto.trim()
               );
-
               const cotacoesFornecedor = cotac.filter(
                 (cotacItem: any) =>
-                  cotacItem.Fornecedor === codValue &&
-                  //cotacItem.Loja == lojValue &&
-                  cotacItem.Produto.trim()
+                  cotacItem.Fornecedor === this.fornecedorCod &&
+                  cotacItem.Loja == this.fornecedorLoja
               );
 
               const lok = productResponse;
@@ -2048,7 +1800,14 @@ export class AppComponent implements OnInit {
       const valueUrl = params.get('field');
       const fieldValue = valueUrl?.toString();
 
-      const constraints: any = [];
+      const constraints: any = [
+        {
+          _field: "metadata#id",
+          _initialValue: fieldValue,
+          _finalValue: fieldValue,
+          _type: 1,
+        }
+      ];
 
       const response = await this.service
         .loadDataset('DSFormulariodoProcessodeCotacao', constraints)
