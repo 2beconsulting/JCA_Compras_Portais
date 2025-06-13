@@ -53,8 +53,6 @@ export class FluigOauthService {
     const signature = `${consumerSecret}&${tokenSecret}`;
     const authorizationHeader = `OAuth oauth_consumer_key="${consumerKey}", oauth_token="${tokenKey}", oauth_signature_method="${method}", oauth_signature="${signature}", oauth_timestamp="${timestamp}", oauth_nonce="${nonce}", oauth_version="1.0"`;
 
-    console.log('HAHA', authorizationHeader);
-
     return new HttpHeaders({
       Authorization: authorizationHeader,
     });

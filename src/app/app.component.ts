@@ -21,7 +21,15 @@ declare global {
 export class AppComponent implements OnInit {
   public authData!: FormGroup;
   public value: any;
-  public documentId: number = 746406;
+  /**
+   * PROD
+  public documentId: number = 746406;   * 
+   * QA
+  public documentId: number = 28855;   * 
+   * DEV
+  public documentId: number = 8006;   * 
+   */
+  public documentId: number = 8006;
   public data: any;
   public status: boolean = true;
   public valueDs: any;
