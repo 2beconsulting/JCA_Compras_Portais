@@ -33,8 +33,8 @@ export class AppComponent implements OnInit {
     public documentIdUser: number = 8006 // Pré Cadastro Authenticator  *
   
    */
-  public documentId: number = 27271;
-  public documentIdUser: number = 28855;
+  public documentId: number = 9442;
+  public documentIdUser: number = 8006;
   public columns = this.service.getColumns();
   public restCall: any;
   public supplier: any;
