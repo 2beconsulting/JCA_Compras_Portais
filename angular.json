@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/portal-jca-preco",
+            "outputPath": "D:/Documents/Companies/2BE/GIT/JCA/JCA - Compras Portal/wcm/widget/widget_portal_preco/src/main/webapp/resources/js/app-angular",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -38,13 +38,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1mb", 
-                  "maximumError": "2mb" 
+                  "maximumWarning": "1mb",
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "3kb", 
-                  "maximumError": "5kb" 
+                  "maximumWarning": "3kb",
+                  "maximumError": "5kb"
                 }
               ],
               "outputHashing": "none"

@@ -82,12 +82,15 @@ export class AppComponent implements OnInit {
   public documentIdCotacion: number = 41603
    * DEV
    * 
-   * 
+  public documentId: number = 9442
+  public documentIdUser: number = 8006
+  public documentIdForn: number = 8008
+  public documentIdCotacion: number = 8214 
    */
-  public documentId: number = 746746
-  public documentIdUser: number = 746406
-  public documentIdForn: number = 746757
-  public documentIdCotacion: number = 746754
+  public documentId: number = 9442
+  public documentIdUser: number = 8006
+  public documentIdForn: number = 8008
+  public documentIdCotacion: number = 8214
   public cardIdCotacion: any;
   public cardIdForn: any;
   public seconds: number = 5;
@@ -427,200 +430,101 @@ export class AppComponent implements OnInit {
     try {
       console.log(data)
       console.log(data.Cotacao)
-      const documentData = {
-        values: data.Cotacao.map((cotacao: any, index: number) => {
-          const isMatchingCotacao =
-            cotacao.Produto.trim() == product.Codigo.trim() &&
-            cotacao.Fornecedor == this.fornecedorCod &&
-            cotacao.Loja == this.fornecedorLoja;
+      var constraint;
 
-          const isSameProductFamily =
-            cotacao.Produto.trim().substring(0, 8) ==
-            product.Produto.trim().substring(0, 8) &&
-            cotacao.Fornecedor == this.fornecedorCod &&
-            cotacao.Loja == this.fornecedorLoja;
+      constraint = data.Cotacao.reduce((acc: Array<any>, cotacao: any, index: number) => {
+        const isMatchingCotacao =
+          cotacao.Produto.trim() == product.Codigo.trim() &&
+          cotacao.Fornecedor == this.fornecedorCod &&
+          cotacao.Loja == this.fornecedorLoja;
 
-          return [
-            {
-              fieldId: `C8_CICLO___${index + 1}`,
-              value: isMatchingCotacao ? product.Ciclo : cotacao.Ciclo,
-            },
-            {
-              fieldId: `BEN_FISCAL___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.BeneficioFiscal
-                : cotacao.BeneficioFiscal,
-            },
-            {
-              fieldId: `C8_ITEM___${index + 1}`,
-              value: isMatchingCotacao ? product.Item : cotacao.Item,
-            },
-            {
-              fieldId: `C8_PRODUTO___${index + 1}`,
-              value: isMatchingCotacao ? product.Produto : cotacao.Produto,
-            },
-            {
-              fieldId: `C8_UM___${index + 1}`,
-              value: isMatchingCotacao ? product.UM : cotacao.UM,
-            },
-            {
-              fieldId: `C8_FORNECE___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.Fornecedor
-                : cotacao.Fornecedor,
-            },
-            {
-              fieldId: `C8_LOJA___${index + 1}`,
-              value: isMatchingCotacao ? this.fornecedorLoja : cotacao.Loja,
-            },
-            {
-              fieldId: `C8_QUANT___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.QtdFornecida
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.QtdFornecida,
-            },
-            {
-              fieldId: `C8_PRECO___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.Preco
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.Preco,
-            },
-            {
-              fieldId: `C8_TOTAL___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.Total
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.Total,
-            },
-            {
-              fieldId: `C8_COND___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.Condicao
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.Condicao,
-            },
-            {
-              fieldId: `C8_PRAZO___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.Prazo
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.Prazo,
-            },
-            {
-              fieldId: `C8_FILENT___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.FilialEntrega
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.FilialEntrega,
-            },
-            {
-              fieldId: `C8_EMISSAO___${index + 1}`,
-              value: isMatchingCotacao ? product.Emissao : cotacao.Emissao,
-            },
-            {
-              fieldId: `C8_VALIPI___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.IPI
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.IPI,
-            },
-            {
-              fieldId: `C8_VALICM___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.ICMS
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.ICMS,
-            },
-            {
-              fieldId: `C8_VALISS___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.ISS
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.ISS,
-            },
-            {
-              fieldId: `C8_DIFAL___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.DIFAL
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.DIFAL,
-            },
-            {
-              fieldId: `C8_SEGURO___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.Seguro
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.Seguro,
-            },
-            {
-              fieldId: `C8_DESPESA___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.Despesa
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.Despesa,
-            },
-            {
-              fieldId: `C8_VALFRE___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.ValorFrete
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.ValorFrete,
-            },
-            {
-              fieldId: `C8_TPFRETE___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.TipoFrete
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.TipoFrete,
-            },
-            {
-              fieldId: `C8_VALIDA___${index + 1}`,
-              value: isMatchingCotacao ? product.Validade : cotacao.Validade,
-            },
-            {
-              fieldId: `C8_NUMPED___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.Pedido
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.Pedido,
-            },
-            {
-              fieldId: `C8_ITEMPED___${index + 1}`,
-              value: isMatchingCotacao
-                ? product.ItemPedido
-                : isSameProductFamily
-                  ? ''
-                  : cotacao.ItemPedido,
-            },
-          ];
-        }).flat(),
-      };
+        const isSameProductFamily =
+          cotacao.Produto.trim().substring(0, 8) ==
+          product.Produto.trim().substring(0, 8) &&
+          cotacao.Fornecedor == this.fornecedorCod &&
+          cotacao.Loja == this.fornecedorLoja;
 
+        if (isMatchingCotacao) {
+          acc = [{
+            "_field": "cardId",
+            "_initialValue": "" + cotacao.documentId,
+            "_finalValue": "" + cotacao.documentId,
+            "_type": 1,
+            "_likeSearch": false
+          }, {
+            "_field": "formId",
+            "_initialValue": "" + this.documentIdCotacion,
+            "_finalValue": "" + this.documentIdCotacion,
+            "_type": 1,
+            "_likeSearch": false
+          }, {
+            "_field": "version",
+            "_initialValue": "" + cotacao.documentVersion,
+            "_finalValue": "" + cotacao.documentVersion,
+            "_type": 1,
+            "_likeSearch": false
+          }, {
+            "_field": "C8_LOJA",
+            "_initialValue": "" + this.fornecedorLoja,
+            "_finalValue": "" + this.fornecedorLoja,
+            "_type": 1,
+            "_likeSearch": false
+          }, {
+            "_field": "C8_ITEM",
+            "_initialValue": "" + product.Item,
+            "_finalValue": "" + product.Item,
+            "_type": 1,
+            "_likeSearch": false
+          }, {
+            "_field": "C8_TOTAL",
+            "_initialValue": "" + product.Total,
+            "_finalValue": "" + product.Total,
+            "_type": 1,
+            "_likeSearch": false
+          }, {
+            "_field": "C8_PRECO",
+            "_initialValue": "" + product.Preco,
+            "_finalValue": "" + product.Preco,
+            "_type": 1,
+            "_likeSearch": false
+          }, {
+            "_field": "C8_FORNECE",
+            "_initialValue": "" + this.fornecedorCod,
+            "_finalValue": "" + this.fornecedorCod,
+            "_type": 1,
+            "_likeSearch": false
+          }, {
+            "_field": "C8_QUANT",
+            "_initialValue": "" + product.QtdFornecida,
+            "_finalValue": "" + product.QtdFornecida,
+            "_type": 1,
+            "_likeSearch": false
+          }, {
+            "_field": "C8_PRODUTO",
+            "_initialValue": "" + product.Produto,
+            "_finalValue": "" + product.Produto,
+            "_type": 1,
+            "_likeSearch": false
+          }, {
+            "_field": "C8_PRAZO",
+            "_initialValue": "" + product.Prazo,
+            "_finalValue": "" + product.Prazo,
+            "_type": 1,
+            "_likeSearch": false
+          }]
+        }
+        return acc;
+      }, []);
 
+      /* this.service
+         .updateCotacion(
+           this.documentIdCotacion,
+           this.cardIdCotacion,
+           documentData
+         )*/
+      console.log("constraint", constraint);
 
-      this.service
-        .updateCotacion(
-          this.documentIdCotacion,
-          this.cardIdCotacion,
-          documentData
-        )
+      this.service.updateRecordLinha(constraint)
         .subscribe((res: any) => {
           data.ProdutoAttUp = data.ProdutoAttUp.map((item: any) =>
             item.Codigo.trim() == product.Codigo.trim() &&

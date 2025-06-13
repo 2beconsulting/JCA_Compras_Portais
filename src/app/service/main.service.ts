@@ -121,6 +121,9 @@ export class MainService {
       .put(url, documentData, { headers })
       .pipe(catchError((error: any) => throwError(error)));
   }
+  public updateRecordLinha(constraints: any[]) {
+    return this.loadDataset("ds_atualiza_filho_ficha", constraints);
+  }
 
   public loadDatasetGED(
     datasetName: string,
