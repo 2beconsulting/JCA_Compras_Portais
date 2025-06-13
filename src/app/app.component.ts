@@ -21,7 +21,20 @@ export class AppComponent implements OnInit {
   public value: any;
   public loadingSuppliers: boolean = false;
   public visible: boolean = false;
+  /**
+   * PROD
+   public documentId: number = 746746 /** DSFormulariodaSolicitacaodeCompras  
+   public documentIdUser: number = 746406 /** Pré Cadastro Authenticator  *
+   QA
+    public documentId: number = 27271 /** DSFormulariodaSolicitacaodeCompras  
+    public documentIdUser: number = 28855 /** Pré Cadastro Authenticator  *
+   DEV   
+    public documentId: number = 9442 // DSFormulariodaSolicitacaodeCompras  
+    public documentIdUser: number = 8006 // Pré Cadastro Authenticator  *
+  
+   */
   public documentId: number = 27271;
+  public documentIdUser: number = 28855;
   public columns = this.service.getColumns();
   public restCall: any;
   public supplier: any;
@@ -46,7 +59,6 @@ export class AppComponent implements OnInit {
   ];
   public seconds: number = 5;
   public dataUser: any;
-  public documentIdUser: number = 28855;
   public valueDs: any;
   public valueCotacaoTabela: any;
   public valueForm: any;
@@ -72,8 +84,8 @@ export class AppComponent implements OnInit {
     await this.consultLogin();
 
     if (this.status == true) {
-      await this.fetchDataSupplier();
       await this.fetchData();
+      await this.fetchDataSupplier();
     } else {
       this.startCountdown();
     }
@@ -152,14 +164,13 @@ export class AppComponent implements OnInit {
 
     try {
       const groupedSuppliers: any = {};
-      const suppliersUserNormalized = this.suppliersUser.map((n: string) => n.trim().toLowerCase());
 
       this.valueCotacaoTabela.content.values.forEach((item: any) => {
         const nome = item.Nome?.trim();
         const cnpj = item.CNPJ?.trim();
 
         if (nome && cnpj && cnpj.toLowerCase() !== 'null' && cnpj !== '') {
-          const key = `${nome.toLowerCase()}-${cnpj}`;
+          const key = `${cnpj}`;
           if (!groupedSuppliers[key]) {
             groupedSuppliers[key] = [];
           }
@@ -171,17 +182,15 @@ export class AppComponent implements OnInit {
 
       this.uniqueSuppliers = Object.keys(groupedSuppliers)
         .filter((key: string) => {
-          const cnpjRegex = /\d{14}$/;
+          const cnpjRegex = /\d{11,14}$/;
           const cnpjMatch = key.match(cnpjRegex);
 
           if (!cnpjMatch) return false;
 
           const cnpj = cnpjMatch[0];
-          const name = key.replace(`-${cnpj}`, '').trim();
-
-          const normalizedKeyName = name.replace(/\s+/g, ' ').toLowerCase();
-
-          return suppliersUserNormalized.includes(normalizedKeyName);
+          return this.supplier.filter(function (item: any) {
+            return item.CNPJ.indexOf(cnpj) > -1
+          }).length > 0;
         })
         .map((key: string) => {
           const supplierGroup = groupedSuppliers[key][0];
@@ -224,9 +233,7 @@ export class AppComponent implements OnInit {
 
       this.value.forEach((item: any) => {
         if (
-          item.A2_CGC.trim() == this.data.CNPJ.trim() &&
-          this.data.Cod == item.A2_COD.trim() &&
-          item.A2_LOJA.trim() == this.data.Loja.trim()
+          item.A2_CGC.trim() == this.data.CNPJ.trim()
         ) {
           this.filteredValue.push({ ...item });
         }
@@ -364,6 +371,7 @@ export class AppComponent implements OnInit {
       alert('As senhas não coincidem. Por favor, tente novamente.');
       return;
     }
+
     const documentData = {
       values: [
         {
@@ -373,6 +381,26 @@ export class AppComponent implements OnInit {
       ],
     };
 
+    this.uniqueSuppliers.forEach((element: any, index: any) => {
+      documentData.values.push(
+        {
+          fieldId: `A2_COD___${index + 1}`,
+          value: element.Cod,
+        },
+        {
+          fieldId: `A2_LOJA___${index + 1}`,
+          value: element.Loja,
+        },
+        {
+          fieldId: `A2_NOME___${index + 1}`,
+          value: element.Nome,
+        },
+        {
+          fieldId: `A2_CGC___${index + 1}`,
+          value: element.CNPJ,
+        }
+      );
+    });
     var response = await this.service.update(this.documentIdUser, this.dataUser.Id, documentData).toPromise();
     alert('Senha atualizada com sucesso!');
     this.newPassword = '';
@@ -510,8 +538,7 @@ export class AppComponent implements OnInit {
       ]
 
       /**
-       * @todo, incluir aqui a constraint para trazer as cotações dos fornecedores que o usuário logado faz parte
-       *  talvez até mudar o dataset, visto que aqui é usado somente para trazer os valores do formulário,
+       * @todo, mudar o dataset, visto que aqui é usado somente para trazer os valores do formulário,
        *  podem muito bem já vir do outros dataset
        * 
        */
@@ -527,9 +554,6 @@ export class AppComponent implements OnInit {
   }
 
   private async loadDatasetTabela(fornecedoresCotacao: String) {
-    /** @todo
-     * receber aqui os fornecedores que retornaram para este usuário,
-     *  e passar somente eles para consulta */
     try {
       const constraints: any = [
         {
